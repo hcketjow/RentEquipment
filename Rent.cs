@@ -20,6 +20,4 @@ public class Rent {
         RentPrice = rentPrice;
         RentPenalty = rentPenalty;
     }
-    
-    
 }

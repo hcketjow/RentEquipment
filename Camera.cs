@@ -1,6 +1,6 @@
 ﻿namespace RentEquipment;
 
-public class Camera
-{
-    
+public class Camera : Equipment {
+    private string CameraLensType;
+    private string CameraLensSystem;
 }
