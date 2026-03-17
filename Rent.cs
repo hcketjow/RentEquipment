@@ -1,23 +1,24 @@
 ﻿namespace RentEquipment;
 
 public class Rent {
-    private DateTime RentDate;
-    private DateTime ReturnDate;
-    private DateTime ActualReturnDate;
-    private double RentPrice;
-    private double RentPenalty;
+    public User User { get; }
+    public Equipment Equipment { get; }
+    public DateTime RentDate { get; }
+    public DateTime ReturnDate { get; }
+    public DateTime? ActualReturnDate { get; private set; }
+    public decimal RentPenalty { get; private set; }
+    public bool IsActive => ActualReturnDate == null;
 
-    public Rent(
-        DateTime rentDate, 
-        DateTime returnDate,
-        DateTime actualReturnDate,
-        double rentPrice, 
-        double rentPenalty
-    ) {
+    public Rent(User user, Equipment equipment, DateTime rentDate, DateTime returnDate)
+    {
+        User = user;
+        Equipment = equipment;
         RentDate = rentDate;
         ReturnDate = returnDate;
+    }
+
+    public void ReturnEquipment(DateTime actualReturnDate, decimal rentPenalty) {
         ActualReturnDate = actualReturnDate;
-        RentPrice = rentPrice;
         RentPenalty = rentPenalty;
     }
 }

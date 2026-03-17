@@ -1,15 +1,16 @@
 ﻿namespace RentEquipment;
 
-public class User
+public abstract class User
 {
-    private int UniqueIdent;
-    private string Name;
-    private string Surname;
-    private enum UserType;
+    private int UniqueIdent { get; }
+    private string Name { get; }
+    private string Surname { get; }
 
-    public User(int uniqueIdent, string name, string surname) {
+    protected User(int uniqueIdent, string name, string surname) {
         UniqueIdent = uniqueIdent;
         Name = name;
         Surname = surname;
     }
+    
+    public abstract int MaxActiveRents { get; }
 }

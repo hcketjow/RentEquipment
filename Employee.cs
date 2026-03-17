@@ -2,7 +2,9 @@
 
 public class Employee : User
 {
-    public Employee(int uniqueIdent, string name, string surname) : base(uniqueIdent, name, surname)
-    {
-    }
+    public Employee(int uniqueIdent, string name, string surname)
+        : base(uniqueIdent, name, surname)
+    {}
+
+    public override int MaxActiveRents => 5;
 }
