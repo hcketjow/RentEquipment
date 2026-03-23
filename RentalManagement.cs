@@ -33,11 +33,45 @@ public class RentalManagement
         _rents.Add(rent);
     }
 
-    public decimal ReturnEqupment(User user, Equipment equipment){
-        return 20;
+    public decimal ReturnEqupment(int EquipmentId, DateTime ActualReturnDate){
+        var rent =  _rents.FirstOrDefault(r => r.User.UniqueIdent == EquipmentId && r.IsActive);
+        if (rent == null)
+            throw new Exception("Nie znaleziono aktywnego wypożyczenia dla tego sprzętu.");
+        decimal penalty = CalculatePenalty(rent.PlannedReturnDate, ActualReturnDate);
+        rent.ReturnEquipment(ActualReturnDate, penalty);
+        rent.Equipment.MarkAsAvailable();
+        return penalty;
     }
 
-    public void QuickReportStatement(User user) {
-        Console.Write("Equipment for user: " + user.Name + ", are: " + GetAvailableEquipment());
+    public void MarkEquipmentAsUnavailable(int equipmentId){
+        var equipment = _equipment.FirstOrDefault(e => e.UniqueIdent == equipmentId);
+        if (equipment == null)
+            throw new Exception("Nie znaleziono sprzętu");
+        if(equipment.Status == EquipmentStatus.Rented)
+            throw new Exception("Nie można oznaczyć wypożyczonego sprzętu jako niedostępnego.");
+        equipment.MarkAsAvailable();
+    }
+
+    public List<Rent> GetActiveRentsForUser(int userId){
+        return _rents.Where(r => r.User.UniqueIdent == userId && r.IsActive).ToList();
+    }
+
+    public List<Rent> GetOverdueRents(){
+        return _rents.Where(r => r.IsActive && r.PlannedReturnDate.Date < DateTime.Now.Date).ToList();
+    }
+
+    public string GenerateReport(){
+        return $"Raport systemu:\n" + $"Użytkownicy: {_users.Count}\n" + $"Sprzęt razem: {_equipment.Count}\n" +
+               $"Dostępny: {_equipment.Count(e => e.Status == EquipmentStatus.Available)}\n" +
+               $"Wypożyczony: {_equipment.Count(e => e.Status == EquipmentStatus.Rented)}\n" +
+               $"Niedostępny: {_equipment.Count(e => e.Status == EquipmentStatus.Unavailable)}\n" +
+               $"Aktywne wypożyczenia: {_rents.Count(r => r.IsActive)}\n" + $"Przeterminowane: {GetOverdueRents().Count}";
+    }
+    
+    private decimal CalculatePenalty(DateTime plannedReturnDate, DateTime actualReturnDate){
+        int lateDays = (actualReturnDate.Date - plannedReturnDate.Date).Days;
+        if (lateDays <= 0)
+            return 0;
+        return lateDays * 10;
     }
 }
