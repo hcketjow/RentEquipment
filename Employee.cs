@@ -7,4 +7,5 @@ public class Employee : User
     {}
 
     public override int MaxActiveRents => 5;
+    public override string UserType => "Employee";
 }

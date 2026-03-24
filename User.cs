@@ -13,6 +13,7 @@ public abstract class User
     }
     
     public abstract int MaxActiveRents { get; }
+    public abstract string UserType { get; }
 
     public override string ToString(){
         return $"{UniqueIdent}: {Name} {Surname}";

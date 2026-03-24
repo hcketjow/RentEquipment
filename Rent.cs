@@ -8,6 +8,7 @@ public class Rent {
     public DateTime? ActualReturnDate { get; private set; }
     public decimal RentPenalty { get; private set; }
     public bool IsActive => ActualReturnDate == null;
+    public bool WasReturnedOnTime => ActualReturnDate.HasValue && ActualReturnDate.Value.Date <= PlannedReturnDate.Date;
 
     public Rent(User user, Equipment equipment, DateTime rentDate, DateTime plannedReturnDate)
     {
@@ -17,15 +18,15 @@ public class Rent {
         PlannedReturnDate = plannedReturnDate;
     }
 
-    public void ReturnEquipment(DateTime actualReturnDate, decimal rentPenalty) {
-        if (actualReturnDate != null)
+    public void ReturnEquipment(DateTime actualReturnDate, decimal rentPenalty){
+        if (ActualReturnDate != null)
             throw new InvalidOperationException("Sprzęt został już zwrócony.");
         ActualReturnDate = actualReturnDate;
         RentPenalty = rentPenalty;
     }
 
-    public override string ToString() {
-        return $"{User.Name} {User.Surname} -> {Equipment.Name}, od {RentDate:yyyy-MM-dd} " +
-               $"do {PlannedReturnDate:yyyy-MM-dd}, aktywne: {IsActive}, kara: {RentPenalty}";
+    public override string ToString(){
+        string returnInfo = ActualReturnDate.HasValue ? $"zwrócono: {ActualReturnDate:yyyy-MM-dd}" : "nie zwrócono";
+        return $"{User.Name} {User.Surname} -> {Equipment.Name}, od {RentDate:yyyy-MM-dd} do {PlannedReturnDate:yyyy-MM-dd}, {returnInfo}, kara: {RentPenalty}";
     }
 }

@@ -6,4 +6,5 @@ public class Student : User{
     {}
 
     public override int MaxActiveRents => 2;
+    public override string UserType => "Student";
 }

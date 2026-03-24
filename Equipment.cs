@@ -16,7 +16,7 @@ public abstract class Equipment {
 
     public void MarkAsRented() => Status = EquipmentStatus.Rented;
     public void MarkAsAvailable() => Status = EquipmentStatus.Available;
-    public void MarkAsUnavaliable() => Status = EquipmentStatus.Unavailable;
+    public void MarkAsUnavailable() => Status = EquipmentStatus.Unavailable;
 
     public override string ToString(){
         return $"{UniqueIdent}: {Name} ({Brand}) [{Status}]";
