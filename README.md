@@ -2,150 +2,65 @@
 
 ## Opis projektu
 
-Projekt przedstawia aplikację konsolową napisaną w języku C#, służącą do obsługi uczelnianej wypożyczalni sprzętu. System umożliwia zarządzanie sprzętem, użytkownikami oraz procesem wypożyczeń.
+Aplikacja konsolowa w C#, która umożliwia zarządzanie wypożyczalnią sprzętu.
 
-Aplikacja pozwala na:
-* dodawanie użytkowników i sprzętu,
-* wypożyczanie i zwracanie sprzętu,
-* kontrolę dostępności,
-* obsługę opóźnień i naliczanie kar,
-* generowanie raportów.
+System pozwala:
 
----
-
-## Struktura projektu:
-### 1. Model domeny
-
-Klasy reprezentujące obiekty systemu:
-* `Equipment` (klasa abstrakcyjna)
-    * `Laptop`
-    * `Camera`
-    * `Projector`
-* `User` (klasa abstrakcyjna)
-    * `Student`
-    * `Employee`
-* `Rent`
-
-Każda z tych klas odpowiada wyłącznie za przechowywanie danych i prostą logikę związaną z własnym stanem.
+* dodawać użytkowników i sprzęt,
+* wypożyczać i zwracać sprzęt,
+* sprawdzać dostępność,
+* naliczać kary za opóźnienia,
+* generować raport.
 
 ---
 
-### 2. Logika biznesowa
+## Struktura
 
-* `RentalManagement`
+Projekt podzielony jest na trzy części:
 
-Klasa odpowiedzialna za:
-* wypożyczanie sprzętu,
-* zwroty,
-* walidację reguł biznesowych,
-* generowanie raportów.
-
-Cała logika operacyjna została skupiona w jednym miejscu, co ułatwia jej modyfikację i utrzymanie.
-
----
-
-### 3. Warstwa prezentacji
-
-* `Program.cs`
-
-Odpowiada jedynie za:
-
-* uruchomienie programu,
-* pokazanie scenariusza działania,
-* komunikację z użytkownikiem (Console).
+* **Model** – klasy: `Equipment`, `Laptop`, `Camera`, `Projector`, `User`, `Student`, `Employee`, `Rent`
+* **Logika** – `RentalManagement` (obsługa wypożyczeń, zwrotów, reguł)
+* **Program** – `Program.cs` (uruchomienie i działanie)
 
 ---
 
 ## Reguły biznesowe
 
-W systemie zaimplementowano następujące zasady:
+* Student: max. 2 wypożyczenia
+* Pracownik: max. 5 wypożyczeń
+* Niedostępny sprzęt nie może być wypożyczony
+* Kara: 10 zł za dzień opóźnienia
 
-* Student może mieć maksymalnie 2 aktywne wypożyczenia
-* Pracownik może mieć maksymalnie 5 aktywnych wypożyczeń
-* Sprzęt oznaczony jako niedostępny nie może być wypożyczony
-* Zwrot po terminie skutkuje naliczeniem kary:
-    * 10 zł za każdy dzień opóźnienia
 ---
 
 ## Decyzje projektowe
 
-### a) Kohezja (spójność)
-
-Każda klasa ma jedną odpowiedzialność:
-* `Equipment` zarządza stanem sprzętu,
-* `User` określa typ i limity użytkownika,
-* `Rent` przechowuje dane wypożyczenia,
-* `RentalManagement` obsługuje logikę systemu.
-
-Dzięki temu klasy są czytelne i łatwe do zrozumienia.
-
+* Każda klasa ma jedną odpowiedzialność (np. `Rent` – wypożyczenie, `Equipment` – sprzęt)
+* Logika biznesowa jest w jednej klasie (`RentalManagement`)
+* `Program.cs` tylko pokazuje działanie systemu
+* Dziedziczenie użyte tylko tam, gdzie ma sens (`User`, `Equipment`)
 ---
 
-### b) Coupling (sprzężenie)
-
-Klasy nie są ze sobą nadmiernie powiązane:
-* `Program` nie zarządza danymi bezpośrednio,
-* komunikacja odbywa się przez `RentalManagement`,
-* brak globalnych zależności.
-
-Zmiany w jednej klasie mają ograniczony wpływ na resztę systemu.
-
----
-
-### c) Dziedziczenie
-
-Zastosowano dziedziczenie tylko tam, gdzie ma sens:
-
-* `Equipment` → różne typy sprzętu,
-* `User` → różne typy użytkowników.
-
-Pozwala to uniknąć duplikacji kodu i zachować czytelność modelu.
-
----
-
-### d) Czytelność i prostota
-
-Projekt został celowo utrzymany w prostej strukturze:
-
-* brak zbędnych warstw,
-* brak nadmiernej liczby klas,
-* logika skupiona w jednym miejscu (`RentalManagement`).
-
-Dzięki temu kod jest łatwy do zrozumienia i modyfikacji.
-
----
-
-## Instrukcja uruchomienia
-
-1. Sklonuj repozytorium:
+## Uruchomienie
 
 ```
 git clone <repozytorium>
 ```
-
-2. Przejdź do folderu projektu:
-
 ```
 cd RentEquipment
 ```
-
-3. Uruchom aplikację:
-
 ```
 dotnet run
 ```
 
 ---
 
-## Scenariusz demonstracyjny
+## Scenariusz
 
-Program prezentuje:
+Program pokazuje:
 
-* dodanie użytkowników i sprzętu,
-* poprawne wypożyczenie,
-* próbę wykonania błędnej operacji,
-* przekroczenie limitu wypożyczeń,
-* zwrot w terminie,
-* zwrot po terminie z naliczeniem kary,
-* oznaczenie sprzętu jako niedostępnego,
-* wygenerowanie raportu końcowego.
+* dodanie danych,
+* poprawne i błędne wypożyczenia,
+* przekroczenie limitu,
+* zwrot w terminie i po terminie,
+* podsumowanie końcowe.
